@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:build": "docker build . -t treehugger:1.0",
+    "docker:run": "docker run -p 3000:80 -d treehugger:1.0"
   },
   "dependencies": {
     "react": "^18.2.0",

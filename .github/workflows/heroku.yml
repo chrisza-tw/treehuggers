@@ -15,7 +15,6 @@ jobs:
         with:
           heroku_app_name: treehugger-asia
           appdir: "./frontend"
-          dockerfile_directory: "./frontend"
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true

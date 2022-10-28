@@ -6,7 +6,7 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
-const serivceAccKeyPath = ""
+const serivceAccKeyPath = process.env.FIREBASE_SECRETS || ""
 
 // Initialize Firebase
 const admin = require("firebase-admin");

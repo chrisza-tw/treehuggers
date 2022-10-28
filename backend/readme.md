@@ -1,16 +1,19 @@
-1. npm install
+# Local Development
 
-2. npm install -D concurrently nodemon
+## Getting Started
+1. Run `npm install`
 
-3. Obtain Serivce key and add the path of the service key to the serivceAccKeyPath constant in index.ts.
-*Key must NOT be commited to github*
+2. Obtain the firebase service key from your peers and add it to `/config`
 
-3. npm run dev
+3. Use the `.env.template` file, rename the file to `.env` and add the path of the firebase service key to the respective environment variable (*Note: Key must NOT be commited to repository)*
 
-4. if there are any missing packages identified, they need to be installed. 
+4. Run `npm run dev`
 
+## Hints
 
-## Homebrew (for macOS users)
+If there are any missing packages identified, kindly install them.
+
+# Homebrew (for macOS users)
 `brew install git-secrets`
 
 # Warning

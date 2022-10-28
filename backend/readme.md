@@ -22,7 +22,9 @@ You're not done yet! You MUST install the git hooks for every repo that you wish
 Here's a quick example of how to ensure a git repository is scanned for secrets on each commit:
 
 `cd /path/to/my/repo`
+
 `git secrets --install`
+
 `git secrets --register-aws`
 
 use `git secrets --scan` to manually scan files, 

@@ -1,0 +1,20 @@
+name: Deployment of Treehugger Frontend 
+on:
+  push:
+    branches:
+      - main
+jobs:
+  app1:
+    name: Treehugger Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and push Docker to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_app_name: treehugger-asia
+          appdir: "./frontend"
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: true

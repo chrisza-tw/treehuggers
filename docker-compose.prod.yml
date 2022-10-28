@@ -13,5 +13,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      FIREBASE_SECRETS: ${secrets.FIRE_BASE_SECRETS}
     ports:
     - "8080:8080"

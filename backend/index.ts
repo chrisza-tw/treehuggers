@@ -1,12 +1,13 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 const { getFirestore } = require('firebase-admin/firestore');
+import { getAvgCarbonIntensityOverTime } from './Service/CalculateAvgCarbonIntensity'
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
-const serivceAccKeyPath = process.env.FIREBASE_SECRETS || ""
+const serivceAccKeyPath = process.env.FIREBASE_SECRET || "/Users/serenequekkaizhen/beach/treehuggers/backend/serviceAccountKey.json"
 
 // Initialize Firebase
 const admin = require("firebase-admin");
@@ -36,4 +37,5 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
   readData();
+  getAvgCarbonIntensityOverTime('eastus', new Date('October 13, 2022 01:00:00 GMT-3:00'), new Date('October 20, 2022 01:00:00 GMT-3:00'))
 });

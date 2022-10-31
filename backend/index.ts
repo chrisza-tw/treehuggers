@@ -3,12 +3,16 @@ import dotenv from 'dotenv';
 const { getFirestore } = require('firebase-admin/firestore');
 import {router} from './src/router/router'
 import { b64ToObject } from './src/utils/converter';
+import cors from 'cors'
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
 const serviceAccountKey = process.env.FIREBASE_SECRETS || ""
+
+app.use(cors())
+app.use(router);
 
 // Initialize Firebase
 const admin = require("firebase-admin");
@@ -35,5 +39,3 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {console.log(`⚡️[server]: Server is running at https://localhost:${port}`)});
-
-app.use(router);

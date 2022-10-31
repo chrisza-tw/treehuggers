@@ -1,3 +1,3 @@
 export const BASE = {
-    PREFIX: "/api/v1/"
+    PREFIX: "/api/v1"
 };

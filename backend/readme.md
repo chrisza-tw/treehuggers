@@ -3,11 +3,15 @@
 ## Getting Started
 1. Run `npm install`
 
-2. Obtain the firebase service key from your peers and add it to `/config`
+2. Obtain the firebase service account key file from your peers and add it into `/config`
 
-3. Use the `.env.template` file, rename the file to `.env` and add the path of the firebase service key to the respective environment variable (*Note: Key must NOT be commited to repository)*
+3. Use the `.env.template` file, rename the file to `.env`
 
-4. Run `npm run dev`
+4. Base64 encode the service account key file via `base64 ./config/serviceAccountKey.json`
+
+5. Copy the base64 encoded string and put it into the environment variable `FIREBASE_SECRETS` located in `.env`
+
+6. Run `npm run dev`
 
 ## Hints
 

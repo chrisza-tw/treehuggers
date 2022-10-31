@@ -2,19 +2,19 @@ import express, { Express, Request, response, Response } from 'express';
 import dotenv from 'dotenv';
 const { getFirestore } = require('firebase-admin/firestore');
 import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from './Service/CalculateAvgCarbonIntensity'
+import { b64ToObject } from './utils/converter';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 8000;
-const serviceAccKeyPath = process.env.FIREBASE_SECRETS || ""
+const serviceAccountKey = process.env.FIREBASE_SECRETS || ""
 
 // Initialize Firebase
 const admin = require("firebase-admin");
-const serviceAccount = require(serviceAccKeyPath);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(b64ToObject(serviceAccountKey))
 });
 
 const db = getFirestore();

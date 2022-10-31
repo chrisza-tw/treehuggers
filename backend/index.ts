@@ -1,7 +1,7 @@
 import express, { Express, Request, response, Response } from 'express';
 import dotenv from 'dotenv';
 const { getFirestore } = require('firebase-admin/firestore');
-import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from './Service/CalculateAvgCarbonIntensity'
+import {router} from './src/router/router'
 import { b64ToObject } from './utils/converter';
 
 dotenv.config();
@@ -34,15 +34,9 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-// async function isGridDirty(){
-//   let avg =  await getAvgCarbonIntensityOverTime('eastus', new Date('2022-10-27'));
-//   let curr = await getCurrentCarbonIntensity('eastus');
-// }
-
 app.listen(port, async() => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
   readData();
-  let avg =  await getAvgCarbonIntensityOverTime('eastus', new Date('2022-10-27'));
-  let curr =  await getCurrentCarbonIntensity('eastus');
-  isGridDirty(curr, avg);
 });
+
+app.use(router);

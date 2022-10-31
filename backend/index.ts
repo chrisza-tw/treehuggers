@@ -2,7 +2,7 @@ import express, { Express, Request, response, Response } from 'express';
 import dotenv from 'dotenv';
 const { getFirestore } = require('firebase-admin/firestore');
 import {router} from './src/router/router'
-import { b64ToObject } from './utils/converter';
+import { b64ToObject } from './src/utils/converter';
 
 dotenv.config();
 
@@ -19,24 +19,21 @@ admin.initializeApp({
 
 const db = getFirestore();
 
-async function readData() {
-  try{
-    const snapshot = await db.collection('treehugger').get();
-    snapshot.forEach((doc: { id: any; data: () => any; }) => {
-      console.log(doc.id, '=>', doc.data());
-    });
-  }catch(error){
-    console.error(error)
-  }
-};
+// async function readData() {
+//   try{
+//     const snapshot = await db.collection('treehugger').get();
+//     snapshot.forEach((doc: { id: any; data: () => any; }) => {
+//       console.log(doc.id, '=>', doc.data());
+//     });
+//   }catch(error){
+//     console.error(error)
+//   }
+// };
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.listen(port, async() => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-  readData();
-});
+app.listen(port, () => {console.log(`⚡️[server]: Server is running at https://localhost:${port}`)});
 
 app.use(router);

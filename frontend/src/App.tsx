@@ -5,21 +5,28 @@ import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
+import RoughLocations from './RoughLocations';
 
 function App() {
   const [isExactLocationPermitted, setIsExactLocationPermitted] = useState(false)
-  const [roughLocation, setRoughLocation] = useState("")
+  // const [roughLocation, setRoughLocation] = useState("")
   const [exactLocation, setExactLocation] = useState({} as Object)
   const [isErrorGetExactLocation, setIsErrorGetExactLocation] = useState(false)
 
+
   const handleChange = (event: any) => {
+    setExactLocation({})
     setIsExactLocationPermitted(event.target.checked);
     if (event.target.checked) getExactLocation()
-    setRoughLocation("")
+    else setExactLocation({})
   };
 
   const handleDropdownChange = (event: any) => {
-    setRoughLocation(event.target.value);
+    const selectedRoughLocation = RoughLocations.locations.find(location => { return location.RegionName == event.target.value })
+    setExactLocation({
+      latitude: Number(selectedRoughLocation?.latitude),
+      longitude: Number(selectedRoughLocation?.longitude)
+    });
   };
 
   const getExactLocation = () => {
@@ -58,13 +65,12 @@ function App() {
         'BFKfUxhAxri9nJeDdEp3NbWjShlgb5KXj0B-F7hml2T6IT6JOtsBpvxUlGcEjkFbeXItDa-gDAL2McUo66gnkOw'
     });
     console.log(JSON.stringify(push));
-    
-    const location = Object.entries(exactLocation).length != 0 ? exactLocation : { roughLocation }
+
     const postBody = {
-      ...location,
+      ...exactLocation,
       endpoint: push.endpoint
     }
-    axios.post("http://localhost:8080/api/v1/subscribe", postBody).then(response => console.log).catch(error => console.log)
+    axios.post("https://treehugger-sg.herokuapp.com/api/v1/subscribe", postBody).then(response => console.log).catch(error => console.log)
   }
 
   return (
@@ -81,14 +87,22 @@ function App() {
         (<div>
         <p>Not able to retrieve your exact location, kindly provide the location nearest to you:</p>
         <Select onChange={handleDropdownChange}>
-          <option value={"SG"}>Singapore</option>
-          <option value={"AUS"}>Australia</option>
+          {
+            RoughLocations.locations.sort((locationA, locationB) => {
+              if (locationA.RegionName > locationB.RegionName) return 1
+              else if (locationA.RegionName < locationB.RegionName) return -1
+              else return 0
+            })
+              .map(location => (
+              <option value={location.RegionName}>{location.RegionName}</option>
+            ))
+          }
         </Select></div>)
         }
 
         <br/>
         {
-        (isExactLocationPermitted || roughLocation) &&
+        (Object.entries(exactLocation).length != 0) &&
         <Button onClick={postSubscribe}>Subscribe</Button>
         }
 

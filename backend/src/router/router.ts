@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { BASE } from "../constants/base";
-import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from "../service/CalculateAvgCarbonIntensity";
+import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from "../controller/CalculateAvgCarbonIntensity";
 import bodyParser from "body-parser";
 
 const router = Router();

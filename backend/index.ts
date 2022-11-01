@@ -23,17 +23,6 @@ admin.initializeApp({
 
 const db = getFirestore();
 
-// async function readData() {
-//   try{
-//     const snapshot = await db.collection('treehugger').get();
-//     snapshot.forEach((doc: { id: any; data: () => any; }) => {
-//       console.log(doc.id, '=>', doc.data());
-//     });
-//   }catch(error){
-//     console.error(error)
-//   }
-// };
-
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });

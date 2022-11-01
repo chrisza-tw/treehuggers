@@ -7,15 +7,23 @@ const router = Router();
 const jsonParser = bodyParser.json()
 
 router.get(BASE.PREFIX + '/gridstatus', async (req: Request, res: Response) => {
+  try {
     let avg =  await getAvgCarbonIntensityOverTime('eastus', new Date('2022-10-27'));
     let curr =  await getCurrentCarbonIntensity('eastus');
     res.send(isGridDirty(curr, avg));
-  });
+  } catch (error) {
+    res.send(error)
+  }
+});
 
 router.post(BASE.PREFIX + '/subscribe', jsonParser, async (req: Request, res: Response) => {
+  try {
     console.log(req.body)
     res.send(req.body)
     // use now as datetime
+  } catch (error) {
+    res.send(error)
+  }
 })
 
 export {router};

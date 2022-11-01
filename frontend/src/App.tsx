@@ -39,10 +39,32 @@ function App() {
     setIsErrorGetExactLocation(true)
   }
 
-  const postSubscribe = () => {
-    const postBody = Object.entries(exactLocation).length != 0 ? exactLocation : { roughLocation }
+  const postSubscribe = async () => {
+    if ('serviceWorker' in navigator) {
+      console.log('yes')
+      let sw = await navigator.serviceWorker.register('/sw.js');
+      console.log(sw);
+    }
+
     console.log("posting..")
-    axios.post("https://treehugger-sg.herokuapp.com/api/v1/subscribe", postBody).then(response => console.log).catch(error => console.log)
+
+    let sw = await navigator.serviceWorker.ready
+    console.log("ready sw")
+    console.log(sw)
+
+    let push = await sw.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey:
+        'BFKfUxhAxri9nJeDdEp3NbWjShlgb5KXj0B-F7hml2T6IT6JOtsBpvxUlGcEjkFbeXItDa-gDAL2McUo66gnkOw'
+    });
+    console.log(JSON.stringify(push));
+    
+    const location = Object.entries(exactLocation).length != 0 ? exactLocation : { roughLocation }
+    const postBody = {
+      ...location,
+      endpoint: push.endpoint
+    }
+    axios.post("http://localhost:8080/api/v1/subscribe", postBody).then(response => console.log).catch(error => console.log)
   }
 
   return (

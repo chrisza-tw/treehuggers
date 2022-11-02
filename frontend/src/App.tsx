@@ -129,7 +129,7 @@ function App() {
         }
        </div>) || 
        (<div className="centered">
-        <p>You've subscribed successfully! Do watch out for notifications indicating whether to use battery or power adapter mode.</p>
+        <p>You've subscribed successfully!</p>
         <p>Current grid status:</p>
         {
           isGridDirty && 

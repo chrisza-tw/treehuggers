@@ -125,8 +125,7 @@ function App() {
 
         <br/>
         {
-        (Object.entries(exactLocation).length != 0) &&
-        <Button onClick={postSubscribe}>Subscribe</Button>
+          <Button disabled={!!!Object.entries(exactLocation).length} onClick={postSubscribe}>Subscribe</Button>
         }
        </div>) || 
        (<div className="centered">

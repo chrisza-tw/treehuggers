@@ -20,8 +20,12 @@ router.get(BASE.PREFIX + '/gridstatus', async (req: Request, res: Response) => {
 router.post(BASE.PREFIX + '/subscribe', jsonParser, async (req: Request, res: Response) => {
   try {
     console.log(req.body)
-    subscribe(req.body)
-    res.send("Subscribed!")
+    const closestRegion = subscribe(req.body).region
+    const gridDirtyResult = isGridDirty(
+      await getAvgCarbonIntensityOverTime(closestRegion, new Date()),
+      await getCurrentCarbonIntensity(closestRegion)
+    )
+    res.send(gridDirtyResult)
   } catch (error) {
     console.log("Error in POST /subscribe", error)
     res.send(error)

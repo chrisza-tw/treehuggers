@@ -12,6 +12,7 @@ const subscribe = (reqBody: any) => {
 
     store.push(newSubscription);
     console.log(store);
+    return newSubscription
 }
 
 export {

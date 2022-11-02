@@ -12,10 +12,10 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 function App() {
   const [isExactLocationPermitted, setIsExactLocationPermitted] = useState(false)
-  // const [roughLocation, setRoughLocation] = useState("")
   const [exactLocation, setExactLocation] = useState({} as Object)
   const [isErrorGetExactLocation, setIsErrorGetExactLocation] = useState(false)
-
+  const [hasUserSubscribed, setHasUserSubscribed] = useState(false)
+  const [isGridDirty, setIsGridDirty] = useState(false)
 
   const handleChange = (event: any) => {
     setExactLocation({})
@@ -73,7 +73,10 @@ function App() {
       subscription: push
     }
     axios.post(`${baseUrl}/api/v1/subscribe`, postBody)
-      .then(response => console.log)
+      .then(response => {
+        setIsGridDirty(response.data)
+        setHasUserSubscribed(true)
+      })
       .catch(error => console.log)
   }
 
@@ -86,44 +89,50 @@ function App() {
         </div>
       </div>
       <div className="split right">
+      
+      {!hasUserSubscribed && (
         <div className="centered">
-          Share your location to get the most accurate carbon emission analysis!
-          <br />
-          <br />
+        For best results, share your location and wait for notifications!
+        <br/>
+        <br/>
 
-          <FormControlLabel
-            control={<Checkbox checked={isExactLocationPermitted} color="primary" onChange={handleChange} />}
-            disabled={isErrorGetExactLocation}
-            label="Share my exact location" />
-          <br />
+        <FormControlLabel 
+        control={<Checkbox checked={isExactLocationPermitted} color="primary" onChange={handleChange} />} 
+        disabled={isErrorGetExactLocation} 
+        label="Share my exact location"/>
+        <br/>
 
-          {!isExactLocationPermitted &&
-            (<div>
-              <p>Otherwise, kindly provide the location nearest to you:</p>
-              <FormControl fullWidth>
-                <InputLabel>Select Region</InputLabel>
-                <Select autoWidth onChange={handleDropdownChange} label="Select Region">
-                  {
-                    RoughLocations.locations.sort((locationA, locationB) => {
-                      if (locationA.RegionName > locationB.RegionName) return 1
-                      else if (locationA.RegionName < locationB.RegionName) return -1
-                      else return 0
-                    })
-                      .map(location => (
-                        <MenuItem value={location.RegionName}>{location.RegionName}</MenuItem>
-                      ))
-                  }
-                </Select>
-              </FormControl>
-            </div>)
-          }
+        {!isExactLocationPermitted && 
+        (<div>
+        <p>Otherwise, kindly provide the location nearest to you:</p>
+        <FormControl fullWidth>
+          <InputLabel>Select Region</InputLabel>
+          <Select autoWidth onChange={handleDropdownChange} label="Select Region">
+              {
+                RoughLocations.locations.sort((locationA, locationB) => {
+                  if (locationA.RegionName > locationB.RegionName) return 1
+                  else if (locationA.RegionName < locationB.RegionName) return -1
+                  else return 0
+                  })
+                  .map(location => (
+                 <MenuItem value={location.RegionName}>{location.RegionName}</MenuItem>
+                ))
+               }  
+          </Select>
+       </FormControl>
+        </div>)
+        }
 
-          <br />
-          {
-            (Object.entries(exactLocation).length != 0) &&
-            <Button onClick={postSubscribe}>Subscribe</Button>
-          }
-        </div>
+        <br/>
+        {
+        (Object.entries(exactLocation).length != 0) &&
+        <Button onClick={postSubscribe}>Subscribe</Button>
+        }
+       </div>) || 
+       (<div className="centered">
+        <p>Current grid status:</p>
+        {isGridDirty && (<h2>&#128738; DIRTY</h2>) || (<h2><span>&#127758;</span> CLEAN</h2>)}
+       </div>)}
       </div>
     </div>
   )

@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { BASE } from "../constants/base";
 import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from "../controller/CalculateAvgCarbonIntensity";
 import bodyParser from "body-parser";
+import { subscribe } from "../service/Subscriber"
 
 const router = Router();
 const jsonParser = bodyParser.json()
@@ -19,9 +20,10 @@ router.get(BASE.PREFIX + '/gridstatus', async (req: Request, res: Response) => {
 router.post(BASE.PREFIX + '/subscribe', jsonParser, async (req: Request, res: Response) => {
   try {
     console.log(req.body)
-    res.send(req.body)
-    // use now as datetime
+    subscribe(req.body)
+    res.send("Subscribed!")
   } catch (error) {
+    console.log("Error in POST /subscribe", error)
     res.send(error)
   }
 })

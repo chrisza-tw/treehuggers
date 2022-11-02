@@ -4,7 +4,10 @@ cleanupOutdatedCaches()
 precacheAndRoute(self.__WB_MANIFEST)
 
 self.addEventListener('push', (event) => {
+    // const data = event.data;
     event.waitUntil(
-        self.registration.showNotification('Hello world!')
+        self.registration.showNotification('TreeHugggers', {
+            body: "Grid is clean!"
+        })
     )
 });

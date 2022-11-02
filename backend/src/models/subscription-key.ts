@@ -8,3 +8,8 @@ export interface SubscriptionKey {
     p256dh: string;
     auth: string;
 }
+
+export interface SubcriptionWithRegion {
+    subscription: Subscription;
+    region: string;
+}

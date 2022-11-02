@@ -4,6 +4,7 @@ const { getFirestore } = require('firebase-admin/firestore');
 import {router} from './src/router/router'
 import { b64ToObject } from './src/utils/converter';
 import cors from 'cors'
+import { store } from './src/service/Subscriber';
 
 dotenv.config();
 
@@ -36,25 +37,16 @@ webpush.setVapidDetails(
   vapidKeys.privateKey
 );
 
-const pushSubscription = 
-  {
-    "endpoint": "...",
-    "expirationTime":null,
-    "keys":
-    {
-      "p256dh":"...",
-      "auth":"..."
-    }
-  };
-
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
 app.get('/notification', async (req: Request, res: Response) => {
-  await webpush.sendNotification(pushSubscription, 'Your Push Payload Text');
-  console.log("message sent");
-  res.json({message: "message sent! "})
+  store?.forEach(async subscriber => {
+    await webpush.sendNotification(subscriber.subscription, 'Your Push Payload Text');
+  });
+
+  res.json({message: "Message sent to subscribers "})
 });
 
 app.listen(port, () => {console.log(`⚡️[server]: Server is running at https://localhost:${port}`)});

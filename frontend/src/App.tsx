@@ -6,7 +6,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 import RoughLocations from './RoughLocations';
-import Box from '@material-ui/core/Box';
 import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
 
 function App() {
@@ -40,7 +39,7 @@ function App() {
       latitude,
       longitude
     } = position.coords;
-    setExactLocation({latitude, longitude})
+    setExactLocation({ latitude, longitude })
   }
 
   const onError = () => {
@@ -70,58 +69,60 @@ function App() {
 
     const postBody = {
       ...exactLocation,
-      endpoint: push.endpoint
+      subscription: push
     }
-    axios.post("https://treehugger-sg.herokuapp.com/api/v1/subscribe", postBody).then(response => console.log).catch(error => console.log)
+    axios.post("https://treehugger-sg.herokuapp.com/api/v1/subscribe", postBody)
+      .then(response => console.log)
+      .catch(error => console.log)
   }
 
   return (
     <div className="App">
-      <div className = "split left">
+      <div className="split left">
         <div className="centered">
           <h1>Reduce Your Carbon Emissions by clicking Subscribe!</h1>
           <p>Based on your location, we can notify you when to switch to battery in order to lower the carbon emissions of your laptop usage!</p>
-          </div>
+        </div>
       </div>
       <div className="split right">
         <div className="centered">
-        Share your location to get the most accurate carbon emission analysis!
-        <br/>
-        <br/>
+          Share your location to get the most accurate carbon emission analysis!
+          <br />
+          <br />
 
-        <FormControlLabel 
-        control={<Checkbox checked={isExactLocationPermitted} color="primary" onChange={handleChange} />} 
-        disabled={isErrorGetExactLocation} 
-        label="Share my exact location"/>
-        <br/>
+          <FormControlLabel
+            control={<Checkbox checked={isExactLocationPermitted} color="primary" onChange={handleChange} />}
+            disabled={isErrorGetExactLocation}
+            label="Share my exact location" />
+          <br />
 
-        {!isExactLocationPermitted && 
-        (<div>
-        <p>Otherwise, kindly provide the location nearest to you:</p>
-        <FormControl fullWidth>
-          <InputLabel>Select Region</InputLabel>
-          <Select autoWidth onChange={handleDropdownChange} label="Select Region">
-              {
-                RoughLocations.locations.sort((locationA, locationB) => {
-                  if (locationA.RegionName > locationB.RegionName) return 1
-                  else if (locationA.RegionName < locationB.RegionName) return -1
-                  else return 0
-                  })
-                  .map(location => (
-                 <MenuItem value={location.RegionName}>{location.RegionName}</MenuItem>
-                ))
-               }  
-          </Select>
-       </FormControl>
-        </div>)
-        }
+          {!isExactLocationPermitted &&
+            (<div>
+              <p>Otherwise, kindly provide the location nearest to you:</p>
+              <FormControl fullWidth>
+                <InputLabel>Select Region</InputLabel>
+                <Select autoWidth onChange={handleDropdownChange} label="Select Region">
+                  {
+                    RoughLocations.locations.sort((locationA, locationB) => {
+                      if (locationA.RegionName > locationB.RegionName) return 1
+                      else if (locationA.RegionName < locationB.RegionName) return -1
+                      else return 0
+                    })
+                      .map(location => (
+                        <MenuItem value={location.RegionName}>{location.RegionName}</MenuItem>
+                      ))
+                  }
+                </Select>
+              </FormControl>
+            </div>)
+          }
 
-        <br/>
-        {
-        (Object.entries(exactLocation).length != 0) &&
-        <Button onClick={postSubscribe}>Subscribe</Button>
-        }
-       </div>
+          <br />
+          {
+            (Object.entries(exactLocation).length != 0) &&
+            <Button onClick={postSubscribe}>Subscribe</Button>
+          }
+        </div>
       </div>
     </div>
   )

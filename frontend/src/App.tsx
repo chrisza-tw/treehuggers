@@ -8,6 +8,8 @@ import axios from 'axios';
 import RoughLocations from './RoughLocations';
 import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
 
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 function App() {
   const [isExactLocationPermitted, setIsExactLocationPermitted] = useState(false)
   // const [roughLocation, setRoughLocation] = useState("")
@@ -62,8 +64,7 @@ function App() {
 
     let push = await sw.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey:
-        'BFKfUxhAxri9nJeDdEp3NbWjShlgb5KXj0B-F7hml2T6IT6JOtsBpvxUlGcEjkFbeXItDa-gDAL2McUo66gnkOw'
+      applicationServerKey: import.meta.env.VITE_APPLICATION_SERVER_KEY
     });
     console.log(JSON.stringify(push));
 
@@ -71,7 +72,7 @@ function App() {
       ...exactLocation,
       subscription: push
     }
-    axios.post("https://treehugger-sg.herokuapp.com/api/v1/subscribe", postBody)
+    axios.post(`${baseUrl}/api/v1/subscribe`, postBody)
       .then(response => console.log)
       .catch(error => console.log)
   }

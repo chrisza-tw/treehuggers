@@ -129,8 +129,18 @@ function App() {
         }
        </div>) || 
        (<div className="centered">
+        <p>You've subscribed successfully! Do watch out for notifications indicating whether to use battery or power adapter mode.</p>
         <p>Current grid status:</p>
-        {isGridDirty && (<h2>&#128738; DIRTY</h2>) || (<h2><span>&#127758;</span> CLEAN</h2>)}
+        {
+          isGridDirty && 
+          (<div>
+            <h2>&#128738; DIRTY</h2>
+            <p>Switch to battery mode to reduce your carbon emissions and watch for our notification to know when the grid is clean enough to use power</p>
+          </div>) || 
+          (<div>
+            <h2><span>&#127758;</span> CLEAN</h2>
+            <p><p>You can continue using your power adapter but watch for our notification to know if the grid is dirty so that you can switch to battery mode</p></p>
+          </div>)}
        </div>)}
       </div>
     </div>

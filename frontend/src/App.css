@@ -3,6 +3,42 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+ 
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  
+}
+
+.left {
+  left: 0;
+  background-color: #3ba883;
+  text-align: center;
+}
+
+.right {
+  right: 0;
+  background-color: #bdfae4
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.FormControl{
+  margin: 1;
+  min-width: 80;
 }
 
 .logo {

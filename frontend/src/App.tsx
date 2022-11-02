@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import Button from '@material-ui/core/Button';
-import Select from '@material-ui/core/Select';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
 import RoughLocations from './RoughLocations';
-import { FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem } from '@mui/material';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 

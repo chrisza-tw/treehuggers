@@ -1,4 +1,5 @@
-import { REGIONS } from "../constants/region-map";
+import { REGIONS } from "../constants";
+import { ActiveRegion } from "../models";
 
 const getMinDistance = (
   lat1: number,
@@ -21,7 +22,7 @@ const getMinDistance = (
   return 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
 };
 
-const getClosestRegion = (lat: number, long: number) => {
+const getClosestRegion = (lat: number, long: number): ActiveRegion => {
   return REGIONS.map((region) => {
     const minDistance = getMinDistance(
       Number(lat),

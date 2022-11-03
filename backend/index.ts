@@ -6,6 +6,7 @@ import { b64ToObject } from './src/utils/converter';
 import cors from 'cors'
 import { store } from './src/service/Subscriber';
 import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from './src/controller/CalculateAvgCarbonIntensity';
+import { NotificationResponse, SubcriptionWithRegion } from './src/models';
 
 dotenv.config();
 
@@ -45,32 +46,21 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.get('/notification', async (req: Request, res: Response) => {
-  store?.forEach(async subscriber => {
-    const avg =  await getAvgCarbonIntensityOverTime(subscriber.region, new Date());
+const sendNotification = async (subscriber: SubcriptionWithRegion) => {
+  const avg =  await getAvgCarbonIntensityOverTime(subscriber.region, new Date());
     const curr =  await getCurrentCarbonIntensity(subscriber.region);
-    const payload = {
-      "gridStatus": isGridDirty(curr,avg)
+    const payload: NotificationResponse = {
+      gridStatus: isGridDirty(curr,avg)
     }
     await webpush.sendNotification(subscriber.subscription, JSON.stringify(payload));
-  });
+}
 
+app.get('/notification', async (req: Request, res: Response) => {
+  store?.forEach(subscription => sendNotification(subscription));
   res.json({message: "Message sent to subscribers "})
 });
 
-async function pushNotification(){
-  store?.forEach(async subscriber => {
-    const avg =  await getAvgCarbonIntensityOverTime(subscriber.region, new Date());
-    const curr =  await getCurrentCarbonIntensity(subscriber.region);
-    const payload = {
-      "gridStatus": isGridDirty(curr,avg)
-    }
-    await webpush.sendNotification(subscriber.subscription, JSON.stringify(payload));
-  });
-  console.log("push sent!")
-}
-
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
-  setInterval(pushNotification, hour)
+  setInterval(sendNotification, hour)
 });

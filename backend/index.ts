@@ -47,7 +47,9 @@ app.get('/', (req: Request, res: Response) => {
 
 app.get('/notification', async (req: Request, res: Response) => {
   store?.forEach(async subscriber => {
-    await webpush.sendNotification(subscriber.subscription, 'Your Push Payload Text');
+    const avg =  await getAvgCarbonIntensityOverTime(subscriber.region, new Date());
+    const curr =  await getCurrentCarbonIntensity(subscriber.region);
+    await webpush.sendNotification(subscriber.subscription, isGridDirty(curr, avg).valueOf.toString());
   });
 
   res.json({message: "Message sent to subscribers "})

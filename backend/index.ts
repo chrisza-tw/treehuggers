@@ -5,6 +5,7 @@ import {router} from './src/router/router'
 import { b64ToObject } from './src/utils/converter';
 import cors from 'cors'
 import { store } from './src/service/Subscriber';
+import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from './src/controller/CalculateAvgCarbonIntensity';
 
 dotenv.config();
 
@@ -12,6 +13,9 @@ const app: Express = express();
 const port = process.env.PORT || 8000;
 const serviceAccountKey = process.env.FIREBASE_SECRETS || ""
 const webpush = require('web-push');
+const hour = 3600000;
+const minute = 5000;
+
 
 app.use(cors())
 app.use(router);
@@ -49,4 +53,16 @@ app.get('/notification', async (req: Request, res: Response) => {
   res.json({message: "Message sent to subscribers "})
 });
 
-app.listen(port, () => {console.log(`⚡️[server]: Server is running at https://localhost:${port}`)});
+async function pushNotification(){
+  store?.forEach(async subscriber => {
+    const avg =  await getAvgCarbonIntensityOverTime(subscriber.region, new Date());
+    const curr =  await getCurrentCarbonIntensity(subscriber.region);
+    await webpush.sendNotification(subscriber.subscription, isGridDirty(curr, avg).valueOf.toString());
+  });
+  console.log("push sent!")
+}
+
+app.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
+  setInterval(pushNotification, hour)
+});

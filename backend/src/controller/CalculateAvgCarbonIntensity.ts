@@ -3,8 +3,8 @@ import moment from 'moment';
 
 const baseURL = "https://carbon-aware-api.azurewebsites.net"
 
-export async function getAvgCarbonIntensityOverTime(location: string, startTime: Date) {
-    const endTime =  moment(startTime).add(7);
+export async function getAvgCarbonIntensityOverTime(location: string, endTime: Date) {
+    const startTime =  moment(endTime).subtract(7);
     let avg = 0;
     await axios.get(baseURL + '/emissions/average-carbon-intensity', 
     {
@@ -30,21 +30,11 @@ export async function getCurrentCarbonIntensity(location: string) {
             location: location,
         }
     }).then(function (response){
-        curr = response.data[0].rating
-    });
+        curr = response?.data?.[0]?.rating
+    }).catch(error => console.log(error));
     console.log(curr);
     return curr;
 }
-
-// export function isGridDirty(location: string, startTime: Date): Boolean{
-//     let curr = getCurrentCarbonIntensity(location); 
-//     console.log(curr)
-//     let avg = getAvgCarbonIntensityOverTime(location, startTime); 
-//     console.log(avg);
-//     console.log(curr > avg);
-//     console.log(100 > 50);
-//     return (curr > avg);
-// }
 
 export function isGridDirty(curr: number, avg: number) {
     console.log(curr>avg)

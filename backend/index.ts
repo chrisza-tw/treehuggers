@@ -59,7 +59,10 @@ async function pushNotification(){
   store?.forEach(async subscriber => {
     const avg =  await getAvgCarbonIntensityOverTime(subscriber.region, new Date());
     const curr =  await getCurrentCarbonIntensity(subscriber.region);
-    await webpush.sendNotification(subscriber.subscription, isGridDirty(curr, avg).valueOf.toString());
+    const payload = {
+      "gridStatus": isGridDirty(curr,avg)
+    }
+    await webpush.sendNotification(subscriber.subscription, JSON.stringify(payload));
   });
   console.log("push sent!")
 }

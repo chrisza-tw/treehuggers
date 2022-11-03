@@ -3,6 +3,7 @@ import { BASE } from "../constants/base";
 import { getAvgCarbonIntensityOverTime, getCurrentCarbonIntensity, isGridDirty } from "../controller/CalculateAvgCarbonIntensity";
 import bodyParser from "body-parser";
 import { subscribe } from "../service/Subscriber"
+import { SubscribeResponse } from "../models";
 
 const router = Router();
 const jsonParser = bodyParser.json()
@@ -19,15 +20,16 @@ router.get(BASE.PREFIX + '/gridstatus', async (req: Request, res: Response) => {
 
 router.post(BASE.PREFIX + '/subscribe', jsonParser, async (req: Request, res: Response) => {
   try {
-    console.log(req.body)
     const closestRegion = subscribe(req.body).region
     const gridDirtyResult = isGridDirty(
       await getAvgCarbonIntensityOverTime(closestRegion, new Date()),
       await getCurrentCarbonIntensity(closestRegion)
     )
-    res.send(gridDirtyResult)
+    res.send({
+      isGridDirty: gridDirtyResult,
+      energySource: closestRegion
+    } as SubscribeResponse)
   } catch (error) {
-    console.log("Error in POST /subscribe", error)
     res.send(error)
   }
 })

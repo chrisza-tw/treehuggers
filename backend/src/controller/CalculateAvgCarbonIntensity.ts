@@ -17,7 +17,7 @@ export async function getAvgCarbonIntensityOverTime(location: string, endTime: D
     }).then(function(response){
         avg = response.data.carbonIntensity;
     });
-    console.log(avg);
+    console.log("average: " + avg.toString());
     return avg;
 }
 
@@ -32,11 +32,12 @@ export async function getCurrentCarbonIntensity(location: string) {
     }).then(function (response){
         curr = response?.data?.[0]?.rating
     }).catch(error => console.log(error));
-    console.log(curr);
+    console.log("current: " + curr.toString());
     return curr;
 }
 
 export function isGridDirty(curr: number, avg: number) {
+    console.log("current > avg : ")
     console.log(curr>avg)
     return (curr > avg); 
 }

@@ -22,8 +22,8 @@ router.post(BASE.PREFIX + '/subscribe', jsonParser, async (req: Request, res: Re
   try {
     const closestRegion = subscribe(req.body).region
     const gridDirtyResult = isGridDirty(
-      await getAvgCarbonIntensityOverTime(closestRegion, new Date()),
-      await getCurrentCarbonIntensity(closestRegion)
+      await getCurrentCarbonIntensity(closestRegion),
+      await getAvgCarbonIntensityOverTime(closestRegion, new Date())
     )
     res.send({
       isGridDirty: gridDirtyResult,

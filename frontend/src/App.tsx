@@ -153,7 +153,7 @@ function App() {
           </div>
         )) || (
           <div className="centered">
-            <p>You've subscribed successfully and your energy is coming from the region <i>${energySource}</i>!</p>
+            <p>You've subscribed successfully!</p>
             <p>Current grid status:</p>
             {(isGridDirty && (
               <div>

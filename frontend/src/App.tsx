@@ -117,6 +117,11 @@ function App() {
     }).catch((error) => console.error("Failed to Unsubcribe", error))
   };
 
+  const triggerTestNotification = () => {
+    axios.get(`${baseUrl}/notification`);
+  }
+
+
   return (
     <div className="App">
       <div className="split left">
@@ -186,6 +191,7 @@ function App() {
         )) || (
           <div className="centered">
             <p>You've subscribed successfully!</p>
+            <a className="test-notification" onClick={triggerTestNotification}>Click here to test your notification</a>
             <p>Grid Status Upon Subscription:</p>
             {(isGridDirty && (
               <div>

@@ -70,6 +70,10 @@
   }
 }
 
+.test-notification {
+  cursor: pointer;
+}
+
 .card {
   padding: 2em;
 }

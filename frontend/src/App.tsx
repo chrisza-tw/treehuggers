@@ -8,6 +8,7 @@ import axios from "axios";
 import RoughLocations from "./RoughLocations";
 import { FormControl, InputLabel, MenuItem } from "@mui/material";
 import { SubscribeResponse } from "./models/subscribe.response";
+import { LOCAL_STORAGE } from "./constants";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -18,20 +19,19 @@ function App() {
   const [isErrorGetExactLocation, setIsErrorGetExactLocation] = useState(false);
   const [hasUserSubscribed, setHasUserSubscribed] = useState(false);
   const [isGridDirty, setIsGridDirty] = useState(false);
-  const [energySource, setEnergySource] = useState("");
 
   const getStorage = () => {
-    const userSubscribed = window.localStorage.getItem("SUBSCRIBED");
+    const userSubscribed = window.localStorage.getItem(LOCAL_STORAGE.SUBSCRIBED);
     if (userSubscribed) setHasUserSubscribed(JSON.parse(userSubscribed));
 
-    const gridStatus = window.localStorage.getItem("GRID_STATUS");
+    const gridStatus = window.localStorage.getItem(LOCAL_STORAGE.GRID_STATUS);
     if (gridStatus) setIsGridDirty(JSON.parse(gridStatus));
 
   };
 
   const setStorage = (userSubscribed: boolean, gridStatus: boolean) => {
-    window.localStorage.setItem("SUBSCRIBED", JSON.stringify(userSubscribed));
-    window.localStorage.setItem("GRID_STATUS", JSON.stringify(gridStatus));
+    window.localStorage.setItem(LOCAL_STORAGE.SUBSCRIBED, JSON.stringify(userSubscribed));
+    window.localStorage.setItem(LOCAL_STORAGE.GRID_STATUS, JSON.stringify(gridStatus));
   };
 
   useEffect(() => {
@@ -102,7 +102,6 @@ function App() {
         const data = response.data as SubscribeResponse;
         setIsGridDirty(data?.isGridDirty);
         setHasUserSubscribed(true);
-        setEnergySource(data?.energySource);
       })
       .catch((error) => console.log);
   };
@@ -112,8 +111,8 @@ function App() {
     let push = await sw.pushManager.getSubscription();
 
     if (push) await push.unsubscribe().then(() => {
-      window.localStorage.removeItem("SUBSCRIBED");
-      window.localStorage.removeItem("GRID_STATUS");
+      window.localStorage.removeItem(LOCAL_STORAGE.SUBSCRIBED);
+      window.localStorage.removeItem(LOCAL_STORAGE.GRID_STATUS);
       window.location.reload();
     }).catch((error) => console.error("Failed to Unsubcribe", error))
   };

@@ -56,11 +56,16 @@ const sendNotification = async (subscriber: SubcriptionWithRegion) => {
 }
 
 app.get('/notification', async (req: Request, res: Response) => {
-  store?.forEach(subscription => sendNotification(subscription));
-  res.json({message: "Message sent to subscribers "})
+  try {
+    store?.forEach(subscription => sendNotification(subscription));
+    res.json({message: "Message sent to subscribers "});
+  } catch(error) {
+    res.send(error);
+  }
+
 });
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
-  setInterval(sendNotification, hour)
+  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+  setInterval(sendNotification, hour);
 });

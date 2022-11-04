@@ -3,7 +3,6 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
- 
 }
 
 .split {
@@ -14,7 +13,6 @@
   top: 0;
   overflow-x: hidden;
   padding-top: 20px;
-  
 }
 
 .left {
@@ -25,7 +23,7 @@
 
 .right {
   right: 0;
-  background-color: #bdfae4
+  background-color: #bdfae4;
 }
 
 .centered {
@@ -36,9 +34,22 @@
   text-align: center;
 }
 
-.FormControl{
+.FormControl {
   margin: 1;
   min-width: 80;
+}
+
+.globe {
+  animation: spin 30s linear alternate infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .logo {
@@ -51,15 +62,6 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @media (prefers-reduced-motion: no-preference) {

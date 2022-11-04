@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
@@ -19,6 +19,28 @@ function App() {
   const [hasUserSubscribed, setHasUserSubscribed] = useState(false);
   const [isGridDirty, setIsGridDirty] = useState(false);
   const [energySource, setEnergySource] = useState("");
+
+  const getStorage = () => {
+    const userSubscribed = window.localStorage.getItem("SUBSCRIBED");
+    if (userSubscribed) setHasUserSubscribed(JSON.parse(userSubscribed));
+
+    const gridStatus = window.localStorage.getItem("GRID_STATUS");
+    if (gridStatus) setIsGridDirty(JSON.parse(gridStatus));
+
+  };
+
+  const setStorage = (userSubscribed: boolean, gridStatus: boolean) => {
+    window.localStorage.setItem("SUBSCRIBED", JSON.stringify(userSubscribed));
+    window.localStorage.setItem("GRID_STATUS", JSON.stringify(gridStatus));
+  };
+
+  useEffect(() => {
+    getStorage();
+  }, []);
+
+  useEffect(() => {
+    setStorage(hasUserSubscribed, isGridDirty);
+  }, [hasUserSubscribed, isGridDirty]);
 
   const handleChange = (event: any) => {
     setExactLocation({});
@@ -83,6 +105,17 @@ function App() {
         setEnergySource(data?.energySource);
       })
       .catch((error) => console.log);
+  };
+
+  const unsubscribe = async () => {
+    let sw = await navigator.serviceWorker.ready;
+    let push = await sw.pushManager.getSubscription();
+
+    if (push) await push.unsubscribe().then(() => {
+      window.localStorage.removeItem("SUBSCRIBED");
+      window.localStorage.removeItem("GRID_STATUS");
+      window.location.reload();
+    }).catch((error) => console.error("Failed to Unsubcribe", error))
   };
 
   return (
@@ -154,7 +187,7 @@ function App() {
         )) || (
           <div className="centered">
             <p>You've subscribed successfully!</p>
-            <p>Current grid status:</p>
+            <p>Grid Status Upon Subscription:</p>
             {(isGridDirty && (
               <div>
                 <h2>&#128738; DIRTY</h2>
@@ -167,7 +200,7 @@ function App() {
             )) || (
               <div>
                 <h2>
-                  <span>&#127758;</span> CLEAN
+                  <span className="globe">&#127758;</span> CLEAN
                 </h2>
                 <p>
                   <p>
@@ -178,6 +211,15 @@ function App() {
                 </p>
               </div>
             )}
+            <div>
+                  <p>
+                    <p>
+                      If you no longer wish to receive notications, click unsubscribe below.
+                      Though we could surely use your help in reducing carbon emissions &#128557;. 
+                    </p>
+                  </p>
+                  <Button onClick={unsubscribe}>Unsubscribe</Button>
+                </div>
           </div>
         )}
       </div>

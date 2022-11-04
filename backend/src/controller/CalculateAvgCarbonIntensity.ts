@@ -4,7 +4,7 @@ import moment from 'moment';
 const baseURL = "https://carbon-aware-api.azurewebsites.net"
 
 export async function getAvgCarbonIntensityOverTime(location: string, endTime: Date) {
-    const startTime =  moment(endTime).subtract(7);
+    const startTime =  moment(endTime).subtract(7, "days");
     let avg = 0;
     await axios.get(baseURL + '/emissions/average-carbon-intensity', 
     {
